@@ -1,3 +1,6 @@
 [submodule "src/coreboot"]
 	path = src/coreboot
 	url = ssh://git@github.com/platinasystems/coreboot
+[submodule "src/linux"]
+	path = src/linux
+	url = ssh://git@github.com/platinasystems/linux
