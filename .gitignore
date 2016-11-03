@@ -1,0 +1,10 @@
+/coreboot
+/coreboot-*.rom
+/linux
+/*.vmlinuz
+/*.cpio.xz
+/*.cpio.xz.u-boot
+/*.dtb
+/*.u-boot.img
+/goes-*
+/goesd-*
