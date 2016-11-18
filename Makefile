@@ -152,9 +152,10 @@ cpiofn = $(subst .xz,,$(notdir $@))
 cpiotmp = $(subst .cpio.xz,.tmp,$@)
 
 %.cpio.xz: goes-%
-	$(Q)install -s $(strip_program) -D $?  $(cpiotmp)/init
-	$(Q)install -d $(cpiotmp)/bin
-	$(Q)ln -sf ../init $(cpiotmp)/bin/goes
+	$(Q)install -s $(strip_program) -D $?  $(cpiotmp)/usr/bin/goes
+	$(Q)install -d $(cpiotmp)/sbin
+	$(Q)ln -s usr/bin/goes $(cpiotmp)/init
+	$(Q)ln -s usr/bin/goes $(cpiotmp)/sbin/init
 	$(Q)mkdir $(cpiotmp)/etc
 	$(Q)echo "nameserver 8.8.8.8" > $(cpiotmp)/etc/resolv.conf
 	$(Q)rm -f $(@:%.xz=%) $@
