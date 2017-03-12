@@ -18,6 +18,7 @@ $1: main=github.com/platinasystems/go/main/goes-example
 $1: vmlinuz=linux/example-amd64/arch/x86_64/boot/bzImage
 $1: coreboot_defconfig=example-amd64_defconfig
 $1: coreboot_crossgcc=crossgcc-i386
+$1: buildroot_defconfig=example-amd64_defconfig
 endef
 
 $(eval $(call example_amd64_vars,example-amd64.cpio.xz))
@@ -26,6 +27,8 @@ $(eval $(call example_amd64_vars,linux/example-amd64/arch/x86_64/boot/bzImage))
 $(eval $(call example_amd64_vars,example-amd64.vmlinuz))
 $(eval $(call example_amd64_vars,coreboot/example-amd64/.config))
 $(eval $(call example_amd64_vars,coreboot-example-amd64.rom))
+$(eval $(call example_amd64_vars,buildroot/example-amd64/.config))
+$(eval $(call example_amd64_vars,buildroot/example-amd64/images/rootfs.cpio.xz))
 
 $(foreach c,$(linux_configs),\
 	$(eval $(call example_amd64_vars,$(c)-example-amd64)))

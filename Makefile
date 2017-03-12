@@ -126,6 +126,7 @@ xVERSION=$(if $(gitdescribe), VERSION=$(gitdescribe), VERSION=$(gitref))
 linux_configured = $(wildcard linux/$(machine)/.config)
 uboot_configured = $(wildcard u-boot/$(machine)/.config)
 coreboot_configured = $(wildcard coreboot/$(machine)/.config)
+buildroot_configured = $(wildcard buildroot/$(machine)/.config)
 
 linux_defconfigs := $(wildcard configs/*.defconfig)
 uboot_defconfigs := $(wildcard configs/*.u-boot_defconfig)
@@ -247,6 +248,19 @@ coreboot/%/.config:
 coreboot-%.rom: coreboot/%/.config %.vmlinuz %.cpio.xz
 	$(mkcoreboot)
 	$(Q)cp coreboot/$*/coreboot.rom $@
+
+mkbuildroot = $(mkbuildroot_)$(MAKE)
+mkbuildroot+= --no-print-directory
+mkbuildroot+= -C src/buildroot
+mkbuildroot+= O=$(CURDIR)/buildroot/$(machine)
+mkbuildroot_= $(if $(dryrun),$(if $(buildroot_configured),+,: ),$(mkinfo)+)
+
+buildroot/%/.config:
+	$(Q)mkdir -p buildroot/$*
+	$(mkbuildroot) $(buildroot_defconfig) olddefconfig
+
+buildroot/%/images/rootfs.cpio.xz: buildroot/%/.config goes-%
+	$(mkbuildroot)
 
 config-%: linux_config=config
 menuconfig-%: linux_config=menuconfig
