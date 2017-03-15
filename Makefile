@@ -245,7 +245,7 @@ coreboot/%/.config:
 	$(mkcoreboot) $(coreboot_crossgcc)
 	$(mkcoreboot) $(coreboot_defconfig)
 
-coreboot-%.rom: coreboot/%/.config %.vmlinuz %.cpio.xz
+coreboot-%.rom: coreboot/%/.config %.vmlinuz buildroot/%/images/rootfs.cpio.xz
 	$(mkcoreboot)
 	$(Q)cp coreboot/$*/coreboot.rom $@
 
