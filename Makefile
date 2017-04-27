@@ -103,6 +103,12 @@ show-%: ; $(Q):$(info $($(subst -,_,$*)))
 
 .PHONY: FORCE
 
+../go/copyright/copyright.go: ../go/LICENSE ../go/PATENTS
+	go generate ../go/copyright
+
+version/version.go: ../go/.git/HEAD
+	go generate ../go/version
+
 xV = $(if $Q,,V=1)
 xARCH = $(if $(arch), ARCH=$(arch))
 xCROSS_COMPILE = $(if $(cross_compile), CROSS_COMPILE=$(cross_compile))
@@ -144,7 +150,7 @@ gcflags = $(if $(GCFLAGS),-gcflags="$(GCFLAGS)" )
 goesd-%:
 	$(gobuild) $(gcflags)$(if $(GOTAGS),-tags "$(GOTAGS)" )$(main)
 
-goes-%:
+goes-%:	| ../go/copyright/copyright.go version/version.go
 	$(gobuild) -tags "netgo$(if $(GOTAGS), $(GOTAGS))" -ldflags "-d" $(main)
 
 strip_program = $(if $(stripper),--strip-program=$(stripper))
