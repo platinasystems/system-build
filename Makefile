@@ -158,7 +158,9 @@ cpiotmp = $(subst .cpio.xz,.tmp,$@)
 	$(Q)ln -s usr/bin/goes $(cpiotmp)/init
 	$(Q)ln -s usr/bin/goes $(cpiotmp)/sbin/init
 	$(Q)mkdir $(cpiotmp)/etc
+	$(Q)mkdir $(cpiotmp)/etc/dhcp
 	$(Q)echo "nameserver 8.8.8.8" > $(cpiotmp)/etc/resolv.conf
+	$(Q)cp scripts/dhclient.conf $(cpiotmp)/etc/dhcp/dhclient.conf
 	$(Q)rm -f $(@:%.xz=%) $@
 	$(Q)cd $(cpiotmp) && find . | $(cpio) >../$(cpiofn)
 	$(Q)xz --check=crc32 -9 $(cpiofn)
