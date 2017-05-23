@@ -145,7 +145,7 @@ goesd-%:
 	$(gobuild) $(gcflags)$(if $(GOTAGS),-tags "$(GOTAGS)" )$(main)
 
 goes-%:
-	$(gobuild) -tags "netgo$(if $(GOTAGS), $(GOTAGS))" -ldflags "-d" $(main)
+	$(gobuild) -tags "netgo$(if $(GOTAGS), $(GOTAGS))" $(main)
 
 strip_program = $(if $(stripper),--strip-program=$(stripper))
 cpio := cpio --quiet -H newc -o --owner 0:0
