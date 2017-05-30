@@ -6,7 +6,7 @@ platina_mk1_help := Platina Systems Mark 1 Platform(s)
 
 platina_mk1_deb = linux/linux-image-$(kernelversion)-platina-mk1-amd64_$(kerneldebver)_amd64.deb
 
-platina_mk1_targets = goes-platina-mk1
+platina_mk1_targets = goes-coreboot
 # platina_mk1_targets+= platina-mk1.cpio.xz
 platina_mk1_targets+= $(platina_mk1_deb)
 
@@ -15,7 +15,6 @@ all+= $(platina_mk1_targets)
 define platina_mk1_vars
 $1: arch=x86_64
 $1: export GOARCH=amd64
-$1: GOTAGS+=uio_pci_dma debug foxy
 $1: kernelrelease=$(kernelversion)-platina-mk1-amd64
 $1: kdeb_pkgversion=$(kerneldebver)
 $1: linux_config=olddefconfig
@@ -27,7 +26,7 @@ $1: coreboot_crossgcc=crossgcc-i386
 $1: buildroot_defconfig=platina-mk1_defconfig
 endef
 
-$(eval $(call platina_mk1_vars,goes-platina-mk1))
+$(eval $(call platina_mk1_vars,goes-coreboot))
 $(eval $(call platina_mk1_vars,platina-mk1.cpio.xz))
 $(eval $(call platina_mk1_vars,linux/platina-mk1/.config))
 $(eval $(call platina_mk1_vars,linux/platina-mk1/arch/x86_64/boot/bzImage))

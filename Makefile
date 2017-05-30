@@ -259,7 +259,7 @@ buildroot/%/.config:
 	$(Q)mkdir -p buildroot/$*
 	$(mkbuildroot) $(buildroot_defconfig) olddefconfig
 
-buildroot/%/images/rootfs.cpio.xz: buildroot/%/.config goes-%
+buildroot/%/images/rootfs.cpio.xz: buildroot/%/.config goes-coreboot
 	$(mkbuildroot)
 
 config-%: linux_config=config
