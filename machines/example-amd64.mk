@@ -16,7 +16,7 @@ $1: linux_config=kvmconfig
 $1: machine=example-amd64
 $1: main=github.com/platinasystems/go/main/goes-example
 $1: vmlinuz=linux/example-amd64/arch/x86_64/boot/bzImage
-$1: coreboot_defconfig=example-amd64_defconfig
+$1: coreboot_defconfig=platina-example-amd64_SB_defconfig
 $1: coreboot_crossgcc=crossgcc-i386
 $1: buildroot_defconfig=example-amd64_defconfig
 endef

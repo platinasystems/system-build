@@ -21,7 +21,7 @@ $1: linux_config=olddefconfig
 $1: machine=platina-mk1
 $1: main=github.com/platinasystems/go/main/goes-coreboot
 $1: vmlinuz=linux/platina-mk1/arch/x86_64/boot/bzImage
-$1: coreboot_defconfig=platina-mk1_defconfig
+$1: coreboot_defconfig=platina-mk1_SB_defconfig
 $1: coreboot_crossgcc=crossgcc-i386
 $1: buildroot_defconfig=platina-mk1_defconfig
 endef
