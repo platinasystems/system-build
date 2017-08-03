@@ -23,7 +23,7 @@ $1: main=github.com/platinasystems/go/main/goes-coreboot
 $1: vmlinuz=linux/platina-mk1/arch/x86_64/boot/bzImage
 $1: coreboot_defconfig=platina-mk1_SB_defconfig
 $1: coreboot_crossgcc=crossgcc-i386
-$1: buildroot_defconfig=platina-mk1_defconfig
+$1: buildroot_defconfig=platina-mk1_SB_defconfig
 endef
 
 $(eval $(call platina_mk1_vars,goes-coreboot))
