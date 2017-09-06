@@ -3,14 +3,14 @@
 source scripts/mk-bmc-env
 source scripts/mk-bmc-ubo
 source scripts/mk-bmc-ini
-source scripts/mk-bmc-sha
+source scripts/mk-bmc-ver
 
 rm -rf ./tmp2
 mkdir tmp2
 
 cp platina-mk1-bmc-env.bin tmp2
 cp platina-mk1-bmc-ubo.bin tmp2
-cp platina-mk1-bmc-sha.bin tmp2
+cp platina-mk1-bmc-ver.bin tmp2
 cp initrd.img.xz tmp2/platina-mk1-bmc-ini.bin
 cp platina-mk1-bmc.vmlinuz tmp2/platina-mk1-bmc-ker.bin
 cp platina-mk1-bmc.dtb tmp2/platina-mk1-bmc-dtb.bin
