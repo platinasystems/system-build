@@ -3,7 +3,7 @@
 source scripts/mk-bmc-env
 source scripts/mk-bmc-ubo
 source scripts/mk-bmc-ini
-source scripts/mk-bmc-ver
+go run scripts/mk-bmc-ver.go dev
 
 rm -rf ./tmp2
 mkdir tmp2
