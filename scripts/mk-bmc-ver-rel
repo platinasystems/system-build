@@ -1,8 +1,0 @@
-#!/bin/bash
-
-dd if=/dev/zero bs=262144 count=1 | tr "\000" "\377" > file40000
-date +%F | sed "s/-//g" > file8
-cat file8 file40000  > platina-mk1-bmc-ver.bin
-truncate -s 262144 platina-mk1-bmc-ver.bin
-rm file8 file40000
-
