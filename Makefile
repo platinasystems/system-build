@@ -270,9 +270,9 @@ gconfig-%: linux_config=gconfig
 
 linux/%/.config:
 	$(Q)mkdir -p linux/$(machine)
-	$(Q)cp configs/$(machine).defconfig linux/$(machine)/.config
-	$(mklinux) $(linux_config)
-	$(Q)cp linux/$(machine)/.config configs/$(machine).defconfig
+	$(Q)cp src/linux/$(linux_config) linux/$(machine)/.config
+	$(mklinux) olddefconfig
+	$(Q)cp linux/$(machine)/.config src/linux/$(linux_config)
 
 config-% menuconfig-% nconfig-% xconfig-% gconfig-%:
 	$(Q)mkdir -p linux/$(machine)

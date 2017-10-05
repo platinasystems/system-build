@@ -12,7 +12,7 @@ all+= $(example_amd64_targets)
 define example_amd64_vars
 $1: arch=x86_64
 $1: export GOARCH=amd64
-$1: linux_config=kvmconfig
+$1: linux_config=arch/x86/configs/platina-example-amd64_defconfig
 $1: machine=example-amd64
 $1: main=github.com/platinasystems/go/main/goes-example
 $1: vmlinuz=linux/example-amd64/arch/x86_64/boot/bzImage
