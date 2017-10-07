@@ -71,7 +71,11 @@ func getImageInfo(x int, nm string, di string, im string) {
 		fmt.Println("Error ls")
 		os.Exit(1)
 	}
-	uu := strings.Split(string(u), " ")
+	v := strings.Replace(string(u), "  ", " ", -1)
+	v = strings.Replace(v, "  ", " ", -1)
+	v = strings.Replace(v, "  ", " ", -1)
+	v = strings.Replace(v, "  ", " ", -1)
+	uu := strings.Split(v, " ")
 	t := time.Now()
 	yr := t.Format("2006")
 	ImgInfo[x].Name = "platina-mk-bmc-" + nm + ".bin"
