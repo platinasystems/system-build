@@ -128,9 +128,6 @@ uboot_configured = $(wildcard u-boot/$(machine)/.config)
 coreboot_configured = $(wildcard coreboot/$(machine)/.config)
 buildroot_configured = $(wildcard buildroot/$(machine)/.config)
 
-linux_defconfigs := $(wildcard configs/*.defconfig)
-uboot_defconfigs := $(wildcard configs/*.u-boot_defconfig)
-
 git_clean = git clean $(if $(dryrun),-n,-f) $(if $(Q),-q )-X -d
 
 mkinfo = $(Q)$(info $(indent)mk $@)
@@ -276,9 +273,9 @@ linux/%/.config:
 
 config-% menuconfig-% nconfig-% xconfig-% gconfig-%:
 	$(Q)mkdir -p linux/$(machine)
-	$(Q)cp configs/$(machine).defconfig linux/$(machine)/.config
+	$(Q)cp src/linux/$(linux_config) linux/$(machine)/.config
 	$(mklinux) $(subst -$*,,$@)
-	$(Q)cp linux/$(machine)/.config configs/$(machine).defconfig
+	$(Q)cp linux/$(machine)/.config src/linux/$(linux_config)
 
 .PRECIOUS: $(foreach machine,$(machines),\
 	linux/$(machine)/.config\
