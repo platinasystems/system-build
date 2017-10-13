@@ -1,0 +1,23 @@
+#!/bin/bash
+
+source scripts/mk-mk1-bmc-env
+source scripts/mk-mk1-bmc-ubo
+source scripts/mk-mk1-bmc-ini
+go run scripts/mk-mk1-bmc-ver.go dev
+
+rm -rf ./tmp2
+mkdir tmp2
+
+cp platina-mk1-bmc-env.bin tmp2
+cp platina-mk1-bmc-ubo.bin tmp2
+cp platina-mk1-bmc-ver.bin tmp2
+cp initrd.img.xz tmp2/platina-mk1-bmc-ini.bin
+cp platina-mk1-bmc.vmlinuz tmp2/platina-mk1-bmc-ker.bin
+cp platina-mk1-bmc.dtb tmp2/platina-mk1-bmc-dtb.bin
+
+cd tmp2
+zip -r ../platina-mk1-bmc.zip .
+
+cd ..
+rm -rf ./tmp2
+
