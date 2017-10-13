@@ -78,7 +78,7 @@ func getImageInfo(x int, nm string, di string, im string) {
 	uu := strings.Split(v, " ")
 	t := time.Now()
 	yr := t.Format("2006")
-	ImgInfo[x].Name = "platina-mk-bmc-" + nm + ".bin"
+	ImgInfo[x].Name = "platina-mk1-bmc-" + nm + ".bin"
 	ImgInfo[x].Build = uu[5] + " " + uu[6] + " " + yr + " " + uu[7]
 	ImgInfo[x].User = uu[2]
 	ImgInfo[x].Size = uu[4]
