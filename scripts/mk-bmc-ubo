@@ -1,9 +1,0 @@
-#!/bin/bash
-
-dd if=/dev/zero of=file400 bs=1024 count=1
-dd if=/dev/zero of=fileA00 bs=2560 count=1
-dd if=/dev/zero of=file80000 bs=524288 count=1
-cat file400 scripts/qspi-header-sckl00 fileA00 u-boot/platina-mk1-bmc/u-boot.imx file80000  > platina-mk1-bmc-ubo.bin
-truncate -s 524288 platina-mk1-bmc-ubo.bin
-rm file400 fileA00 file80000
-
