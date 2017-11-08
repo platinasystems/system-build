@@ -1,0 +1,17 @@
+#!/bin/bash
+
+dd if=/dev/zero of=file2000 bs=8192 count=1
+
+tr '\012' '\000' < scripts/mk2-mc1-bmc-envvars > platina-mk2-mc1-bmc-env
+
+cat platina-mk2-mc1-bmc-env file2000 > platina-mk2-mc1-bmc-env.b
+
+truncate -s 8188 platina-mk2-mc1-bmc-env.b
+
+crc32 platina-mk2-mc1-bmc-env.b > crc.ascii
+
+go run scripts/crc.go
+
+cat crc platina-mk2-mc1-bmc-env.b > platina-mk2-mc1-bmc-env.bin
+
+rm file2000 platina-mk2-mc1-bmc-env platina-mk2-mc1-bmc-env.b crc.ascii crc

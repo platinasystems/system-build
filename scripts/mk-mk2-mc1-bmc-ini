@@ -1,0 +1,31 @@
+#!/bin/bash
+
+rm -rf initrd-tree
+mkdir initrd-tree
+cd initrd-tree/
+xzcat ../platina-mk2-mc1-bmc.cpio.xz | cpio -d -i -m
+cd ..
+rm -f ./tmp/initrd.*
+rm -rf ./tmp
+mkdir ./tmp
+rm -rf ./mnt
+mkdir ./mnt
+chmod 775 ./mnt
+dd if=/dev/zero of=./tmp/initrd.img bs=1024 count=22000
+sudo mke2fs -F -m 0 -b 1024 -t ext4 ./tmp/initrd.img 22000
+sudo mount ./tmp/initrd.img ./mnt -t ext4 -o loop=/dev/loop5
+sudo mkdir ./mnt/bin
+sudo mkdir ./mnt/etc
+sudo mkdir ./mnt/dev
+sudo mknod ./mnt/dev/console c 5 1
+sudo mkdir ./mnt/boot
+sudo cp platina-mk2-mc1-bmc.dtb ./mnt/boot/.
+sudo cp scripts/resolv.conf ./mnt/etc/.
+cd ./mnt
+sudo cp  ../initrd-tree/usr/bin/goes init
+cd bin
+sudo ln -s ../init goes
+cd ../../
+sudo umount ./mnt
+xz --check=crc32 -9 ./tmp/initrd.img
+cp ./tmp/initrd.img.xz .
