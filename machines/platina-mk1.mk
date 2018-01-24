@@ -36,6 +36,8 @@ $(eval $(call platina_mk1_vars,coreboot-platina-mk1.rom))
 $(eval $(call platina_mk1_vars,buildroot/platina-mk1/.config))
 $(eval $(call platina_mk1_vars,buildroot/platina-mk1/images/rootfs.cpio.xz))
 $(eval $(call platina_mk1_vars,$(platina_mk1_deb)))
+$(eval $(call platina_mk1_vars,gtags-platina-mk1))
+$(eval $(call platina_mk1_vars,bindeb-pkg-platina-mk1))
 
 $(foreach c,$(linux_configs),\
 	$(eval $(call platina_mk1_vars,$(c)-platina-mk1)))

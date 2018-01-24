@@ -63,6 +63,9 @@ Debug targets:
 Machines:$(foreach machine,$(machines),
   $(machine)	- $($(subst -,_,$(machine))_help))
 
+Other targets:
+  bindeb-pkg-MACHINE
+  gtags-MACHINE
 endef
 
 linux_configs = config
@@ -182,11 +185,16 @@ goes_make_parallel = -j $(shell				\
 
 mklinux = $(mklinux_)$(MAKE)
 mklinux+= --no-print-directory
-mklinux+= -C $(CURDIR)/src/linux
+mklinux+= -C linux/$(machine)
 mklinux+= $(goes_make_parallel)
-mklinux+= O=$(CURDIR)/linux/$(machine)
 mklinux+= $(xV)$(xARCH)$(xCROSS_COMPILE)$(xKDEB_PKGVERSION)$(xKERNELRELEASE)
 mklinux_= $(if $(dryrun),$(if $(linux_configured),+,: ),$(mkinfo)+)
+
+linux/%/Kconfig:
+	$(Q)mkdir -p $(@D)
+	$(Q)cd src/linux; \
+		git worktree add ../../$(@D) 2>/dev/null || \
+		git clone . ../../$(@D)
 
 %.vmlinuz: linux/%/.config
 	$(mklinux) $(notdir $(vmlinuz))
@@ -259,25 +267,24 @@ buildroot/%/.config:
 buildroot/%/images/rootfs.cpio.xz: buildroot/%/.config goes-coreboot
 	$(mkbuildroot)
 
-config-%: linux_config=config
-menuconfig-%: linux_config=menuconfig
-nconfig-%: linux_config=nconfig
-xconfig-%: linux_config=xconfig
-gconfig-%: linux_config=gconfig
+linux/%/.config: linux/%/Kconfig
+	$(Q)$(mklinux) $(notdir $(linux_config))
 
-linux/%/.config:
-	$(Q)mkdir -p linux/$(machine)
-	$(Q)cp src/linux/$(linux_config) linux/$(machine)/.config
-	$(mklinux) olddefconfig
-	$(Q)cp linux/$(machine)/.config src/linux/$(linux_config)
+.PHONY: gtags-%
+gtags-%: linux/%/.config
+	$(Q)$(mklinux) gtags
 
-config-% menuconfig-% nconfig-% xconfig-% gconfig-%:
-	$(Q)mkdir -p linux/$(machine)
-	$(Q)cp src/linux/$(linux_config) linux/$(machine)/.config
-	$(mklinux) $(subst -$*,,$@)
-	$(Q)cp linux/$(machine)/.config src/linux/$(linux_config)
+.PHONY: bindeb-pkg-%
+bindeb-pkg-%:
+	$(Q)$(mklinux) bindeb-pkg
+
+.PHONY: config-% menuconfig-% nconfig-% xconfig-% gconfig-%
+config-% menuconfig-% nconfig-% xconfig-% gconfig-%: linux/%/.config
+	$(Q)$(mklinux) $(subst -$*,,$@)
+	$(Q)cp linux/$(machine)/.config linux/$(machine)/$(linux_config)
 
 .PRECIOUS: $(foreach machine,$(machines),\
+	linux/$(machine)/Kconfig\
 	linux/$(machine)/.config\
 	linux/$(machine)/arch/x86_64/boot/bzImage\
 	linux/$(machine)/arch/arm/boot/zImage\
