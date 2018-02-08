@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# run this from system-build
+
+make clean
+make -B uboot_defconfig=platinamx6boards_qspi_defconfig platina-mk1-bmc
+
