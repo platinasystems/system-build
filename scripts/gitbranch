@@ -1,0 +1,91 @@
+#!/bin/bash
+# run from system-build
+
+echo system-build
+git branch
+echo
+
+echo buildroot
+cd ../buildroot
+git branch
+cd ../system-build
+echo
+
+echo go
+cd ../go
+git branch
+cd ../system-build
+echo
+
+echo src/u-boot
+cd src/u-boot
+git branch
+cd ../..
+echo
+
+echo src/linux
+cd src/linux
+git branch
+cd ../..
+echo
+
+echo src/coreboot
+cd src/coreboot
+git branch
+cd ../..
+echo
+
+echo src/coreboot/3rdparty/arm-trusted-firmware
+cd src/coreboot/3rdparty/arm-trusted-firmware
+git branch
+cd ../../../..
+echo
+
+echo src/coreboot/3rdparty/blobs
+cd src/coreboot/3rdparty/blobs
+git branch
+cd ../../../..
+echo
+
+echo src/coreboot/3rdparty/chromeec
+cd src/coreboot/3rdparty/chromeec
+git branch
+cd ../../../..
+echo
+
+echo src/coreboot/3rdparty/intel-blobs
+cd src/coreboot/3rdparty/intel-blobs
+git branch
+cd ../../../..
+echo
+
+echo src/coreboot/3rdparty/libhwbase
+cd src/coreboot/3rdparty/libgfxinit
+git branch
+cd ../../../..
+echo
+
+echo src/coreboot/3rdparty/libgfxinit
+cd src/coreboot/3rdparty/libgfxinit
+git branch
+cd ../../../..
+echo
+
+echo src/coreboot/3rdparty/vboot
+cd src/coreboot/3rdparty/vboot
+git branch
+cd ../../../..
+echo
+
+echo fe1
+cd ../fe1
+git branch
+cd ../system-build
+echo
+
+echo firmware-fe1a
+cd ../firmware-fe1a
+git branch
+cd ../system-build
+echo
+
