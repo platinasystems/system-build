@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# run this from system-build
+
+git clean -d -x -f
+git submodule update -r
+cd src/coreboot
+git clean -d -x -f
+cd ../..
+make coreboot-platina-mk1.rom
+
