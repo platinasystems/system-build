@@ -1,1 +1,18 @@
 #!/bin/bash
+
+####### ADD PREMAKE TO macine/bmc:  make -B goes-platina-mk1-bmc
+
+# run this from system-build
+
+#cd ../go
+#git pull
+#cd ../system-build
+
+rm -rf linux/platina-mk1-bmc/
+make clean
+make -B uboot_defconfig=platinamx6boards_qspi_defconfig platina-mk1-bmc
+
+scripts/mk-mk1-bmc-zip-rel
+mkdir ~/images >& /dev/null
+cp -p platina-mk1-bmc.zip ~/images
+

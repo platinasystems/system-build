@@ -1,1 +1,24 @@
 #!/bin/bash
+
+# run this from system-build
+git clean -d -x -f
+
+#git submodule update -r
+
+cd src/coreboot
+#git pull
+git clean -d -x -f
+
+cd ../..
+rm -rf linux/platina-mk1-amd64
+make -B platina-mk1
+
+mkdir ~/images >& /dev/null
+cp -p linux/linux-image-* ~/images/linux-image-platina-mk1-4.13.0.deb
+
+cd src/linux
+git describe | tr -d "\n" > ~/images/linux-image-platina-mk1
+cd ../..
+echo "-platina-mk1-amd64" >> ~/images/linux-image-platina-mk1
+echo "linux-image-platina-mk1-4.13.0.deb" >> ~/images/linux-image-platina-mk1
+

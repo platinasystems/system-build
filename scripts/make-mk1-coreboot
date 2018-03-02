@@ -3,9 +3,14 @@
 # run this from system-build
 
 git clean -d -x -f
-git submodule update -r
+#git submodule update -r
+
 cd src/coreboot
+#git pull
 git clean -d -x -f
+
 cd ../..
 make coreboot-platina-mk1.rom
+mkdir ~/images >& /dev/null
+cp -p coreboot-platina-mk1.rom ~/images
 

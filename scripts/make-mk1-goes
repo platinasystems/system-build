@@ -1,1 +1,13 @@
 #!/bin/bash
+
+# run this from system-build
+
+cd ../go/main/goes-platina-mk1
+
+make -B goes-platina-mk1-installer
+
+cp -p goes-platina-mk1 ~/images
+cp -p goes-platina-mk1-installer ~/images
+
+cd ../../../system-build
+
