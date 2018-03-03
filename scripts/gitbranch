@@ -3,89 +3,104 @@
 
 echo system-build
 git branch
+git describe
 echo
 
 echo buildroot
 cd ../buildroot
 git branch
+git describe
 cd ../system-build
 echo
 
 echo go
 cd ../go
 git branch
+git describe
 cd ../system-build
 echo
 
 echo src/u-boot
 cd src/u-boot
 git branch
+git describe
 cd ../..
 echo
 
 echo src/linux
 cd src/linux
 git branch
+git describe
 cd ../..
 echo
 
 echo src/coreboot
 cd src/coreboot
 git branch
+git describe
 cd ../..
 echo
 
 echo src/coreboot/3rdparty/arm-trusted-firmware
 cd src/coreboot/3rdparty/arm-trusted-firmware
 git branch
+git describe
 cd ../../../..
 echo
 
 echo src/coreboot/3rdparty/blobs
 cd src/coreboot/3rdparty/blobs
 git branch
+git describe
 cd ../../../..
 echo
 
 echo src/coreboot/3rdparty/chromeec
 cd src/coreboot/3rdparty/chromeec
 git branch
+git describe
 cd ../../../..
 echo
 
 echo src/coreboot/3rdparty/intel-blobs
 cd src/coreboot/3rdparty/intel-blobs
 git branch
+git describe
 cd ../../../..
 echo
 
 echo src/coreboot/3rdparty/libhwbase
 cd src/coreboot/3rdparty/libgfxinit
 git branch
+git describe
 cd ../../../..
 echo
 
 echo src/coreboot/3rdparty/libgfxinit
 cd src/coreboot/3rdparty/libgfxinit
 git branch
+git describe
 cd ../../../..
 echo
 
 echo src/coreboot/3rdparty/vboot
 cd src/coreboot/3rdparty/vboot
 git branch
+git describe
 cd ../../../..
 echo
 
 echo fe1
 cd ../fe1
 git branch
+git describe
 cd ../system-build
 echo
 
 echo firmware-fe1a
 cd ../firmware-fe1a
 git branch
+git describe
 cd ../system-build
 echo
 
