@@ -1,106 +1,108 @@
 #!/bin/bash
 # run from system-build
 
-echo system-build
-git branch
-git describe
-echo
+mkdir ~/images >& /dev/null
 
-echo buildroot
+echo system-build > ~/images/tags
+git branch >> ~/images/tags
+git describe >> ~/images/tags
+echo >> ~/images/tags
+
+echo buildroot >> ~/images/tags
 cd ../buildroot
-git branch
-git describe
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../system-build
-echo
+echo >> ~/images/tags
 
-echo go
+echo go >> ~/images/tags
 cd ../go
-git branch
-git describe
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../system-build
-echo
+echo >> ~/images/tags >> ~/images/tags
 
-echo src/u-boot
+echo src/u-boot >> ~/images/tags
 cd src/u-boot
-git branch
-git describe
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../..
-echo
+echo >> ~/images/tags
 
-echo src/linux
+echo src/linux >> ~/images/tags
 cd src/linux
-git branch
-git describe
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../..
-echo
+echo >> ~/images/tags
 
-echo src/coreboot
-cd src/coreboot
-git branch
-git describe
+echo src/coreboot >> ~/images/tags
+cd src/coreboot >> ~/images/tags
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../..
-echo
+echo >> ~/images/tags
 
-echo src/coreboot/3rdparty/arm-trusted-firmware
+echo src/coreboot/3rdparty/arm-trusted-firmware >> ~/images/tags
 cd src/coreboot/3rdparty/arm-trusted-firmware
-git branch
-git describe
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../../../..
-echo
+echo >> ~/images/tags
 
-echo src/coreboot/3rdparty/blobs
+echo src/coreboot/3rdparty/blobs >> ~/images/tags
 cd src/coreboot/3rdparty/blobs
-git branch
-git describe
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../../../..
-echo
+echo >> ~/images/tags
 
-echo src/coreboot/3rdparty/chromeec
+echo src/coreboot/3rdparty/chromeec >> ~/images/tags
 cd src/coreboot/3rdparty/chromeec
-git branch
-git describe
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../../../..
-echo
+echo >> ~/images/tags
 
-echo src/coreboot/3rdparty/intel-blobs
+echo src/coreboot/3rdparty/intel-blobs >> ~/images/tags
 cd src/coreboot/3rdparty/intel-blobs
-git branch
-git describe
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../../../..
-echo
+echo >> ~/images/tags
 
-echo src/coreboot/3rdparty/libhwbase
+echo src/coreboot/3rdparty/libhwbase >> ~/images/tags
 cd src/coreboot/3rdparty/libgfxinit
-git branch
-git describe
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../../../..
-echo
+echo >> ~/images/tags
 
-echo src/coreboot/3rdparty/libgfxinit
+echo src/coreboot/3rdparty/libgfxinit >> ~/images/tags
 cd src/coreboot/3rdparty/libgfxinit
-git branch
-git describe
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../../../..
-echo
+echo >> ~/images/tags
 
-echo src/coreboot/3rdparty/vboot
+echo src/coreboot/3rdparty/vboot >> ~/images/tags
 cd src/coreboot/3rdparty/vboot
-git branch
-git describe
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../../../..
-echo
+echo >> ~/images/tags
 
-echo fe1
+echo fe1 >> ~/images/tags
 cd ../fe1
-git branch
-git describe
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../system-build
-echo
+echo >> ~/images/tags
 
-echo firmware-fe1a
+echo firmware-fe1a >> ~/images/tags
 cd ../firmware-fe1a
-git branch
-git describe
+git branch >> ~/images/tags
+git describe >> ~/images/tags
 cd ../system-build
-echo
+echo >> ~/images/tags
 
