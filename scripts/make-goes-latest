@@ -1,0 +1,45 @@
+#!/bin/bash
+# nightly build
+#
+# images will be in ~/nightly/images
+# buildlogs in ~/nightly/buildlogs, includes 'git describe' for built with tags
+#
+
+source ~/.bashrc &> /dev/null
+rm ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1 &> /dev/null
+
+mkdir ~/nightly >& /dev/null
+mkdir ~/nightly/images >& /dev/null
+mkdir ~/nightly/buildlogs >& /dev/null
+
+_now=$(date +"%F:%H:%M:%M")
+_file="goes-platina-mk1-$_now"
+_logfile="buildlog-goes-platina-mk1-$_now"
+
+echo "fe1" > ~/logfile
+cd ~/gopath/src/github.com/platinasystems/fe1
+git describe >> ~/logfile
+git fetch &>> ~/logfile
+
+echo >> ~/logfile
+echo "firmware-fe1a" >> ~/logfile
+cd ~/gopath/src/github.com/platinasystems/firmware-fe1a
+git describe >> ~/logfile
+git fetch &>> ~/logfile
+
+echo >> ~/logfile
+echo "go" >> ~/logfile
+cd ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1
+git describe >> ~/logfile
+git fetch &>> ~/logfile
+
+echo >> ~/logfile
+echo "make" >> ~/logfile
+#make fe1a.zip >> ~/logfile
+make -B goes-platina-mk1 &>> ~/logfile
+
+echo done >> ~/logfile
+mv ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1 ~/nightly/images/$_file
+rm ~/nightly/images/goes-platina-mk1-latest
+ln -s ~/nightly/images/$_file ~/nightly/images/goes-platina-mk1-latest
+mv ~/logfile ~/nightly/buildlogs/$_logfile
