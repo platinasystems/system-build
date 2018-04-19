@@ -18,28 +18,45 @@ _logfile="buildlog-goes-platina-mk1-$_now"
 
 echo "fe1" > ~/logfile
 cd ~/gopath/src/github.com/platinasystems/fe1
-git describe >> ~/logfile
 git fetch &>> ~/logfile
+git pull &>> ~/logfile
+git describe >> ~/logfile
 
 echo >> ~/logfile
 echo "firmware-fe1a" >> ~/logfile
 cd ~/gopath/src/github.com/platinasystems/firmware-fe1a
-git describe >> ~/logfile
 git fetch &>> ~/logfile
+git pull &>> ~/logfile
+git describe >> ~/logfile
 
 echo >> ~/logfile
 echo "go" >> ~/logfile
 cd ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1
-git describe >> ~/logfile
 git fetch &>> ~/logfile
+git pull &>> ~/logfile
+git describe >> ~/logfile
 
 echo >> ~/logfile
 echo "make" >> ~/logfile
 #make fe1a.zip >> ~/logfile
+
+# check if tags are the same
+grep "v" ~/logfile | grep -v "vfio" | sum > ~/t2
+grep "v" ~/lastfile | grep -v "vfio" | sum > ~/t3
+file1=`sum ~/t2`
+file2=`sum ~/t3`
+if [ "$file1" = "$file2" ]
+then
+    echo "Files have the same content"
+    exit
+fi
+
 make -B goes-platina-mk1 &>> ~/logfile
 
 echo done >> ~/logfile
+cp ~/logfile ~/lastfile
 mv ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1 ~/nightly/images/$_file
 rm ~/nightly/images/goes-platina-mk1-latest
 ln -s ~/nightly/images/$_file ~/nightly/images/goes-platina-mk1-latest
 mv ~/logfile ~/nightly/buildlogs/$_logfile
+
