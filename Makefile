@@ -199,7 +199,7 @@ linux/%/Kconfig:
 	$(mklinux) $(notdir $(vmlinuz))
 	$(Q)install $(vmlinuz) $@
 
-linux/linux-image-$(kernelversion)-%_$(kerneldebver).deb: linux/%/.config
+linux/linux-image-$(kernelversion)-%_$(kerneldebver)_amd64.deb: linux/%/.config
 	$(mklinux) bindeb-pkg
 
 %.dtb: %.vmlinuz

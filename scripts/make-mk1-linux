@@ -10,7 +10,7 @@ cd src/coreboot
 git clean -d -x -f
 
 cd ../..
-rm -rf linux/platina-mk1
+rm -rf linux/platina-mk1-amd64
 make -B platina-mk1
 
 mkdir ~/images >& /dev/null
