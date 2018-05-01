@@ -1,0 +1,73 @@
+#!/bin/bash
+# nightly build
+#
+# images will be in ~/nightly/demo/images
+# buildlogs in ~/nightly/demo/buildlogs, includes 'git describe' for built with tags
+#
+
+source ~/.bashrc &> /dev/null
+rm ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1 &> /dev/null
+
+mkdir ~/nightly >& /dev/null
+mkdir ~/nightly/demo >& /dev/null
+mkdir ~/nightly/demo/images >& /dev/null
+mkdir ~/nightly/demo/buildlogs >& /dev/null
+
+_now=$(date +"%F:%H:%M:%M")
+_file="goes-platina-mk1-$_now"
+_filei="goes-platina-mk1-installer-$_now"
+_logfile="buildlog-goes-platina-mk1-$_now"
+
+echo "fe1" > ~/demo-logfile
+cd ~/gopath/src/github.com/platinasystems/fe1
+git checkout demo
+git fetch &>> ~/demo-logfile
+git pull &>> ~/demo-logfile
+git describe >> ~/demo-logfile
+
+echo >> ~/demo-logfile
+echo "firmware-fe1a" >> ~/demo-logfile
+cd ~/gopath/src/github.com/platinasystems/firmware-fe1a
+git fetch &>> ~/demo-logfile
+git pull &>> ~/demo-logfile
+git describe >> ~/demo-logfile
+
+echo >> ~/demo-logfile
+echo "go" >> ~/demo-logfile
+cd ~/gopath/src/github.com/platinasystems/go
+git checkout demo
+cd ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1
+git fetch &>> ~/demo-logfile
+git pull &>> ~/demo-logfile
+git describe >> ~/demo-logfile
+
+echo >> ~/demo-logfile
+echo "make" >> ~/demo-logfile
+#make fe1a.zip >> ~/demo-logfile
+
+# check if tags are the same
+grep "v" ~/demo-logfile | grep -v "vfio" | sum > ~/t2
+grep "v" ~/lastfile | grep -v "vfio" | sum > ~/t3
+file1=`sum ~/t2`
+file2=`sum ~/t3`
+if [ "$file1" = "$file2" ]
+then
+    echo "Files have the same content"
+    exit
+fi
+
+make -B goes-platina-mk1 &>> ~/demo-logfile
+make -B goes-platina-mk1-installer
+
+echo done >> ~/demo-logfile
+cp ~/demo-logfile ~/demo-lastfile
+mv ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1 ~/nightly/demo/images/$_file
+rm ~/nightly/demo/images/goes-platina-mk1-latest
+ln -s ~/nightly/demo/images/$_file ~/nightly/demo/images/goes-platina-mk1-latest
+
+mv ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1-installer ~/nightly/demo/images/$_filei
+rm ~/nightly/demo/images/goes-platina-mk1-installer-latest
+ln -s ~/nightly/demo/images/$_filei ~/nightly/demo/images/goes-platina-mk1-installer-latest
+
+mv ~/demo-logfile ~/nightly/demo/buildlogs/$_logfile
+

@@ -1,16 +1,17 @@
 #!/bin/bash
 # nightly build
 #
-# images will be in ~/nightly/images
-# buildlogs in ~/nightly/buildlogs, includes 'git describe' for built with tags
+# images will be in ~/nightly/master/images
+# buildlogs in ~/nightly/master/buildlogs, includes 'git describe' for built with tags
 #
 
 source ~/.bashrc &> /dev/null
 rm ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1 &> /dev/null
 
 mkdir ~/nightly >& /dev/null
-mkdir ~/nightly/images >& /dev/null
-mkdir ~/nightly/buildlogs >& /dev/null
+mkdir ~/nightly/master >& /dev/null
+mkdir ~/nightly/master/images >& /dev/null
+mkdir ~/nightly/master/buildlogs >& /dev/null
 
 _now=$(date +"%F:%H:%M:%M")
 _file="goes-platina-mk1-$_now"
@@ -19,6 +20,7 @@ _logfile="buildlog-goes-platina-mk1-$_now"
 
 echo "fe1" > ~/logfile
 cd ~/gopath/src/github.com/platinasystems/fe1
+git checkout master
 git fetch &>> ~/logfile
 git pull &>> ~/logfile
 git describe >> ~/logfile
@@ -32,6 +34,8 @@ git describe >> ~/logfile
 
 echo >> ~/logfile
 echo "go" >> ~/logfile
+cd ~/gopath/src/github.com/platinasystems/go
+git checkout master
 cd ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1
 git fetch &>> ~/logfile
 git pull &>> ~/logfile
@@ -57,13 +61,13 @@ make -B goes-platina-mk1-installer
 
 echo done >> ~/logfile
 cp ~/logfile ~/lastfile
-mv ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1 ~/nightly/images/$_file
-rm ~/nightly/images/goes-platina-mk1-latest
-ln -s ~/nightly/images/$_file ~/nightly/images/goes-platina-mk1-latest
+mv ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1 ~/nightly/master/images/$_file
+rm ~/nightly/master/images/goes-platina-mk1-latest
+ln -s ~/nightly/master/images/$_file ~/nightly/master/images/goes-platina-mk1-latest
 
-mv ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1-installer ~/nightly/images/$_filei
-rm ~/nightly/images/goes-platina-mk1-installer-latest
-ln -s ~/nightly/images/$_filei ~/nightly/images/goes-platina-mk1-installer-latest
+mv ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1-installer ~/nightly/master/images/$_filei
+rm ~/nightly/master/images/goes-platina-mk1-installer-latest
+ln -s ~/nightly/master/images/$_filei ~/nightly/master/images/goes-platina-mk1-installer-latest
 
-mv ~/logfile ~/nightly/buildlogs/$_logfile
+mv ~/logfile ~/nightly/master/buildlogs/$_logfile
 
