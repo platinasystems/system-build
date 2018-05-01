@@ -14,6 +14,7 @@ mkdir ~/nightly/buildlogs >& /dev/null
 
 _now=$(date +"%F:%H:%M:%M")
 _file="goes-platina-mk1-$_now"
+_filei="goes-platina-mk1-installer-$_now"
 _logfile="buildlog-goes-platina-mk1-$_now"
 
 echo "fe1" > ~/logfile
@@ -52,11 +53,17 @@ then
 fi
 
 make -B goes-platina-mk1 &>> ~/logfile
+make -B goes-platina-mk1-installer
 
 echo done >> ~/logfile
 cp ~/logfile ~/lastfile
 mv ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1 ~/nightly/images/$_file
 rm ~/nightly/images/goes-platina-mk1-latest
 ln -s ~/nightly/images/$_file ~/nightly/images/goes-platina-mk1-latest
+
+mv ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1-installer ~/nightly/images/$_filei
+rm ~/nightly/images/goes-platina-mk1-installer-latest
+ln -s ~/nightly/images/$_filei ~/nightly/images/goes-platina-mk1-installer-latest
+
 mv ~/logfile ~/nightly/buildlogs/$_logfile
 
