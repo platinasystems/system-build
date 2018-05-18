@@ -158,6 +158,8 @@ cpiotmp = $(subst .cpio.xz,.tmp,$@)
 	$(Q)ln -s usr/bin/goes $(cpiotmp)/sbin/init
 	$(Q)mkdir $(cpiotmp)/etc
 	$(Q)echo "nameserver 8.8.8.8" > $(cpiotmp)/etc/resolv.conf
+	$(Q)mkdir -p $(cpiotmp)/etc/ssl/certs
+	$(Q)cp -H /etc/ssl/certs/ca-certificates.crt $(cpiotmp)/etc/ssl/certs/
 	$(Q)rm -f $(@:%.xz=%) $@
 	$(Q)cd $(cpiotmp) && find . | $(cpio) >../$(cpiofn)
 	$(Q)xz --check=crc32 -9 $(cpiofn)
