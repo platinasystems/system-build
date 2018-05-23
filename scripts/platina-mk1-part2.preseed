@@ -1,0 +1,216 @@
+#### Contents of the preconfiguration file (for jessie)
+### Localization
+d-i debian-installer/locale string en_US
+d-i debian-installer/add-kernel-opts string video=off console=ttyS0,115200
+
+d-i netcfg/hostname string debian
+d-i netcfg/domain string
+
+#### Mirror settings
+#d-i mirror/country string US
+d-i mirror/country string manual
+#d-i mirror/http/countries select US
+d-i mirror/http/countries select manual
+d-i mirror/http/directory string /debian
+d-i mirror/http/hostname string http.us.debian.org
+d-i mirror/http/mirror select ftp.us.debian.org
+d-i mirror/protocol select http
+# Blank/no http proxy needed to access mirror.
+d-i mirror/http/proxy string
+
+# Choose kernel to install
+# Uncomment this to display a list of possible kernels and prompt user.
+d-i base-installer/kernel/image string linux-image-586
+
+# Driver needed by your Ethernet card:
+#d-i	ethdetect/module_select	select	no ethernet card
+
+# Configure /etc/apt/sources.list later (eg. with Ansible).
+# Uncomment following 2 commands if you don't want to use a network mirror.
+d-i apt-setup/use_mirror boolean false
+# "Continue without a network mirror?"
+d-i apt-setup/no_mirror boolean true
+
+# Controls whether to use NTP to set the clock during the install
+d-i clock-setup/ntp boolean true
+# NTP server to use. The default is almost always fine here.
+#d-i clock-setup/ntp-server string ntp.example.com
+
+# Controls whether or not the hardware clock is set to UTC.
+d-i clock-setup/utc boolean true
+
+d-i time/zone string America/Los_Angeles
+d-i debian-installer/locale string en_US.UTF-8
+d-i debian-installer/language string en
+d-i debian-installer/country string US
+
+### Account setup
+# Skip creation of a root account (normal user account will be able to
+# use sudo).
+d-i passwd/root-login boolean false
+# Alternatively, to skip creation of a normal user account.
+#d-i passwd/make-user boolean false
+
+# Root password, either in clear text
+#d-i passwd/root-password password r00tme
+#d-i passwd/root-password-again password r00tme
+# or encrypted using an MD5 hash.
+#d-i passwd/root-password-crypted password $6$i9WSQigV$lm22f92E35P/IGLvBDVLoiEnJQCHL72pkVkop844gUUVdfTXkLgH.2K4gXh0NiOcCA0bAq4F8PSYjry9zlWnW.
+
+# To create a normal user account.
+d-i passwd/user-fullname string platina
+d-i passwd/username string platina
+# Normal user's password, either in clear text
+#d-i passwd/user-password password insecure
+#d-i passwd/user-password-again password insecure
+# or encrypted using an MD5 hash.
+# or encrypted using a hash (use: mkpasswd -m sha-512).
+d-i passwd/user-password-crypted password $6$gC4jqxusEXiest7G$YTG/vu7jJA9tkL3Ch7etvaHW6b88zUx6gNbW6ToOm2oxJ.PECmvVsqOZqde/Ik3KyyzYL1DtBfW87AnjvFNoW.
+# Create the first user with the specified UID instead of the default.
+#d-i passwd/user-uid string 1010
+
+# The user account will be added to some standard initial groups. To
+# override that, use this.
+d-i passwd/user-default-groups string platina sudo
+
+###### Package selection.
+
+# You can choose to install any combination of tasks that are available.
+# Available tasks as of this writing include: Desktop environment,
+# Web server, Print server, DNS server, File server, Mail server,
+# SQL database, manual package selection. The last of those will run
+# aptitude. You can also choose to install no tasks, and force the
+# installation of a set of packages in some other way.
+
+# don't install any tasks
+#tasksel   tasksel/first multiselect
+
+# https://www.debian.org/releases/stable/amd64/apbs04.html.en
+#tasksel   tasksel/first multiselect Desktop environment
+#tasksel  tasksel/first multiselect Web server, Mail server, DNS server
+tasksel tasksel/first multiselect ssh-server
+
+# Make sure we have ssh server, curl
+# Python 2.7 and python-apt needed for Ansible.
+d-i pkgsel/include string sudo ntp openssh-server curl python python-apt redis-tools
+
+
+
+###### Partitioning.
+
+# If the system has free space you can choose to only partition that space.
+# This is only honoured if partman-auto/method (below) is not set.
+d-i partman-auto/init_automatically_partition select biggest_free
+#d-i partman-auto/init_automatically_partition       select  Guided - use entire disk
+
+# Alternatively, you may specify a disk to partition. If the system has only
+# one disk the installer will default to using that, but otherwise the device
+# name must be given in traditional, non-devfs format (so e.g. /dev/sda
+# and not e.g. /dev/discs/disc0/disc).
+# For example, to use the first SCSI/SATA hard disk:
+#d-i partman-auto/disk string /dev/sda
+# In addition, you'll need to specify the method to use.
+# The presently available methods are:
+# - regular: use the usual partition types for your architecture
+# - lvm:     use LVM to partition the disk
+# - crypto:  use LVM within an encrypted partition
+#d-i partman-auto/method string lvm
+#d-i partman-auto/method string regular
+
+# If one of the disks that are going to be automatically partitioned
+# contains an old LVM configuration, the user will normally receive a
+# warning. This can be preseeded away...
+d-i partman-auto/purge_lvm_from_device boolean true
+# And the same goes for the confirmation to write the lvm partitions.
+d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+
+# You can choose from any of the predefined partitioning recipes:
+# - atomic: all files in one partition
+# - home:   separate /home partition
+# - multi:  separate /home, /var, and /tmp partitions
+d-i partman-auto/choose_recipe  select All files in one partition (recommended for new users)
+#d-i  partman-auto/choose_recipe  select Desktop machine
+#d-i  partman-auto/choose_recipe  select Multi-user workstation
+#d-i partman-auto/choose_recipe select atomic
+
+# Or provide a recipe of your own...
+# If you have a way to get a recipe file into the d-i environment, you can
+# just point at it.
+#d-i partman-auto/expert_recipe_file string /hd-media/recipe
+
+# If not, you can put an entire recipe into the preconfiguration file in one
+# (logical) line. This example creates a small /boot partition, suitable
+# swap, and uses the rest of the space for the root partition:
+#d-i partman-auto/expert_recipe string                         	\
+#      boot-root ::                                            	\
+#              12000 16000 16000 ext4                          	\
+#                      	$primary{ }                 	      	\
+#                      	method{ keep } 				\
+#                      	use_filesystem{ }			\
+#			filesystem{ ext4 }			\
+#              		.                                      	\
+#              4000 5700 5700 linux-swap                         \
+#                        method{ swap }                          \
+#                        format{ }                               \
+#                        .					\
+#              100000 100000 -1 ext4		                \
+#		      	$bootable{ }				\
+#                      	method{ format }			\
+#			format { }				\
+#			use_filesystem{ }			\
+#			filesystem{ ext4 }    			\
+#			mountpoint{ / }				\
+#              		.
+# The full recipe format is documented in the file partman-auto-recipe.txt
+# included in the 'debian-installer' package or available from D-I source
+# repository. This also documents how to specify settings such as file
+# system labels, volume group names and which physical devices to include
+# in a volume group.
+
+# This makes partman automatically partition without confirmation, provided
+# that you told it what to do using one of the methods above.
+# uncomment the following three values to makes partman automatically partition
+# without confirmation.
+#d-i partman-basicfilesystems/no_mount_point boolean false
+d-i partman/confirm_write_new_label boolean true
+#d-i partman/choose_partition  select Finish partitioning and write changes to disk
+d-i partman/choose_partition select finish
+d-i partman/confirm     boolean true
+d-i partman/confirm_nooverwrite boolean true
+d-i partman-partitioning/confirm_write_new_label boolean true 
+
+
+
+#### Boot loader installation.
+
+# This is fairly safe to set, it makes grub install automatically to the MBR
+# if no other operating system is detected on the machine.
+d-i grub-installer/only_debian  boolean true
+# This one makes grub-installer install to the MBR if if finds some other OS
+# too, which is less safe as it might not be able to boot that other OS.
+d-i grub-installer/with_other_os  boolean true
+
+# "Device for boot loader installation:"
+d-i grub-installer/bootdev string  /dev/sda
+
+### skip some annoying installation status notes
+
+# netboot: Prompt before reboot, else tor will reboot, netboot, and reinstall!
+# BUT, for invader with coreboot, it always boots to > prompt, so ok to
+# preseed 'installation complete' prompts away (2017/01/11).
+
+# Avoid that last message about the install being complete.
+d-i finish-install/reboot_in_progress note
+# Avoid the introductory message.
+base-config base-config/intro note
+# Avoid the final message.
+base-config base-config/login note
+
+d-i popularity-contest/participate  boolean false
+
+### reboot when finished
+d-i debian-installer/exit/poweroff boolean true
+
+
+
