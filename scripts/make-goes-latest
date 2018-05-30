@@ -13,6 +13,7 @@ mkdir ~/nightly/master >& /dev/null
 mkdir ~/nightly/master/images >& /dev/null
 mkdir ~/nightly/master/buildlogs >& /dev/null
 
+regression_server=172.17.2.28
 _now=$(date +"%F:%H:%M:%M")
 _file="goes-platina-mk1-$_now"
 _filei="goes-platina-mk1-installer-$_now"
@@ -68,6 +69,7 @@ ln -s ~/nightly/master/images/$_file ~/nightly/master/images/goes-platina-mk1-la
 mv ~/gopath/src/github.com/platinasystems/go/main/goes-platina-mk1/goes-platina-mk1-installer ~/nightly/master/images/$_filei
 rm ~/nightly/master/images/goes-platina-mk1-installer-latest
 ln -s ~/nightly/master/images/$_filei ~/nightly/master/images/goes-platina-mk1-installer-latest
+scp -p ~/nightly/master/images/goes-platina-mk1-installer-latest $regression_server:~/master
 
 mv ~/logfile ~/nightly/master/buildlogs/$_logfile
 

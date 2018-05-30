@@ -1,0 +1,48 @@
+#!/bin/bash
+# nightly kernel build
+#
+# kernel images will be in ~/nightly
+# buildlogs in ~/nightly/buildlogs, includes 'git describe' for built with tags
+#
+
+source ~/.bashrc &>/dev/null
+
+mkdir ~/nightly &>/dev/null
+mkdir ~/nightly/mk1-linux-buildlogs &>/dev/null
+
+regression_server=172.17.2.28
+_now=$(date +"%F:%H:%M:%M")
+_logfile="buildlog-mk1-linux-$_now"
+
+rm ~/$_logfile &>/dev/null
+echo $_now > ~/$_logfile
+echo >> ~/$_logfile
+cd ~/gopath/src/github.com/platinasystems/system-build
+echo "Update submodule..." >> ~/$_logfile
+git submodule update >> ~/$_logfile 
+grep "checked out" ~/$_logfile  &>/dev/null
+if [ $? -ne 0 ]
+then
+    echo "No update then no build and done" >> ~/$_logfile
+    mv ~/$_logfile ~/nightly/mk1-linux-buildlogs
+    exit
+fi
+
+echo >> ~/$_logfile
+echo "Merge..." >> ~/$_logfile
+cd ~/gopath/src/github.com/platinasystems/system-build/linux/platina-mk1
+git merge --ff-only origin/master >> ~/$_logfile 2>&1
+git describe >> ~/$_logfile 2>&1
+
+echo >> ~/$_logfile
+echo "Build..." >> ~/$_logfile
+cd ~/gopath/src/github.com/platinasystems/system-build
+rm linux/linux-* &>/dev/null
+scripts/make-mk1-linux >> ~/$_logfile 
+
+echo >> ~/$_logfile
+echo Done >> ~/$_logfile
+
+scp -p ~/gopath/src/github.com/platinasystems/system-build/linux/linux-image*mk1_*.deb $regression_server:
+mv ~/gopath/src/github.com/platinasystems/system-build/linux/linux-image*mk1_*.deb ~/nightly
+mv ~/$_logfile ~/nightly/mk1-linux-buildlogs
