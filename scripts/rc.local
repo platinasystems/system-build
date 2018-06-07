@@ -1,0 +1,27 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+file="/postinstall.tar.gz"
+if [ -f "$file" ]
+then
+    echo "$file found, doing post-install" > /tmp/postinstall
+    cp /postinstall.tar.gz /tmp
+    cd /tmp
+    gunzip postinstall.tar.gz
+    tar -xvf postinstall.tar
+    ./postinstall.sh
+else
+    echo "$file not found, not doing post-install" > /tmp/postinstall
+fi
+
+exit 0
