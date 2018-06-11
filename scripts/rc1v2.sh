@@ -92,4 +92,4 @@ wget http://172.16.2.23/downloads/20170901/coreboot-platina-mk1.rom
 
 goes uninstall
 
-reboot
+#reboot

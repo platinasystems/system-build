@@ -18,6 +18,7 @@ rm iproute2-4.13.0.tar.gz
 # wget http://192.168.101.127/goes-platina-mk1-installer
 # wget http://downloads.platinasystems.com/v0.4/goes-platina-mk1-installer
 # wget http://downloads.platinasystems.com/v0.41/goes-platina-mk1-installer
+wget http://172.16.2.23:/downloads/goes-platina-mk1-installer
 chmod 655 goes-platina-mk1-installer
 ./goes-platina-mk1-installer
 goes status;
