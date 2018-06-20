@@ -5,44 +5,56 @@
 # buildlogs in ~/nightly/buildlogs, includes 'git describe' for built with tags
 #
 
+usage () {
+    echo "Usage: $0 <branch_name>"
+    exit 1
+}
+
+if [ $# -lt 1 ]; then
+    usage
+fi
+
+my_branch=$1
+
 source ~/.bashrc &>/dev/null
 
-mkdir ~/nightly &>/dev/null
-mkdir ~/nightly/mk1-linux-buildlogs &>/dev/null
+mkdir -p ~/nightly/$my_branch/buildlogs &>/dev/null
 
 regression_server=172.17.2.28
 _now=$(date +"%F:%H:%M:%M")
-_logfile="buildlog-mk1-linux-$_now"
+_logfile="buildlog-mk1-linux-$my_branch-$_now"
 
 rm ~/$_logfile &>/dev/null
 echo $_now > ~/$_logfile
 echo >> ~/$_logfile
+
+for cpnt in system-build system-build/src/buildroot system-build/src/coreboot system-build/src/linux system-build/src/u-boot
+do
+  cd ~/gopath/src/github.com/platinasystems/$cpnt
+  echo "Update $cpnt..." >> ~/$_logfile
+  git checkout $my_branch >> ~/$_logfile 
+  git pull >> ~/$_logfile
+done
+
 cd ~/gopath/src/github.com/platinasystems/system-build
-echo "Update submodule..." >> ~/$_logfile
-git submodule update >> ~/$_logfile 
-grep "checked out" ~/$_logfile  &>/dev/null
-if [ $? -ne 0 ]
+my_build=`make help | grep linux-i`
+ls $my_build >> ~/$_logfile
+if [ $? -eq 0 ]
 then
-    echo "No update then no build and done" >> ~/$_logfile
-    mv ~/$_logfile ~/nightly/mk1-linux-buildlogs
+    echo "build exists, done." >> ~/$_logfile
+    mv ~/$_logfile ~/nightly/$my_branch/buildlogs
     exit
 fi
 
 echo >> ~/$_logfile
-echo "Merge..." >> ~/$_logfile
-cd ~/gopath/src/github.com/platinasystems/system-build/linux/platina-mk1
-git merge --ff-only origin/master >> ~/$_logfile 2>&1
-git describe >> ~/$_logfile 2>&1
-
-echo >> ~/$_logfile
 echo "Build..." >> ~/$_logfile
-cd ~/gopath/src/github.com/platinasystems/system-build
-rm linux/linux-* &>/dev/null
-scripts/make-mk1-linux >> ~/$_logfile 
+rm -rf linux >> ~/$_logfile
+make -B $my_build >> ~/$_logfile 
 
 echo >> ~/$_logfile
 echo Done >> ~/$_logfile
 
-scp -p ~/gopath/src/github.com/platinasystems/system-build/linux/linux-image*mk1_*.deb $regression_server:
-mv ~/gopath/src/github.com/platinasystems/system-build/linux/linux-image*mk1_*.deb ~/nightly
-mv ~/$_logfile ~/nightly/mk1-linux-buildlogs
+scp -p $my_build $regression_server:~/$my_branch
+mkdir -p ~/nightly/$my_branch/images &>/dev/null
+cp -p  $my_build ~/nightly/$my_branch/images
+mv ~/$_logfile ~/nightly/$my_branch/buildlogs
