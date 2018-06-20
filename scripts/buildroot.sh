@@ -1,7 +1,7 @@
 #!/bin/sh
 board=`basename $BASE_DIR`
 goes=../../goes-$board
-test -x $goes || goes=../../goes-coreboot
+test -x $goes || goes=../../goes-boot
 cp $goes $1/usr/bin/goes
 $HOST_DIR/usr/bin/$HOSTARCH-linux-strip $1/usr/bin/goes
 rm -f $1/init
