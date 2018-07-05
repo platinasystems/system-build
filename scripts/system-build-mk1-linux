@@ -50,11 +50,26 @@ echo >> ~/$_logfile
 echo "Build..." >> ~/$_logfile
 rm -rf linux >> ~/$_logfile
 make -B $my_build >> ~/$_logfile 
+if [ $? -ne 0 ]
+then
+  echo "Build again..." >> ~/$_logfile
+  rm -rf linux >> ~/$_logfile
+  make -B $my_build >> ~/$_logfile
+fi
 
 echo >> ~/$_logfile
 echo Done >> ~/$_logfile
+mv ~/$_logfile ~/nightly/$my_branch/buildlogs
+
+astr=${my_build/linux\//}
+bstr=${astr/linux-image-4.13.0-platina-mk1_/}
+cstr=${bstr/_amd64.deb/-amd64}
+echo $cstr > linux-image-platina-mk1
+echo $astr >> linux-image-platina-mk1
 
 scp -p $my_build $regression_server:~/$my_branch
+scp -p linux-image-platina-mk1 $regression_server:~/$my_branch
+
 mkdir -p ~/nightly/$my_branch/images &>/dev/null
-cp -p  $my_build ~/nightly/$my_branch/images
-mv ~/$_logfile ~/nightly/$my_branch/buildlogs
+cp -p $my_build ~/nightly/$my_branch/images
+cp -p linux-image-platina-mk1 ~/nightly/$my_branch/images
