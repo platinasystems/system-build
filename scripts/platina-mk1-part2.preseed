@@ -3,7 +3,12 @@
 d-i debian-installer/locale string en_US
 d-i debian-installer/add-kernel-opts string video=off console=ttyS0,115200
 
-d-i netcfg/hostname string debian
+# Disable network configuration entirely. This is useful for cdrom
+# installations on non-networked devices where the network questions,
+# warning and long timeouts are a nuisance.
+#d-i netcfg/enable boolean false
+
+d-i netcfg/hostname string platina 
 d-i netcfg/domain string
 
 #### Mirror settings
@@ -92,7 +97,8 @@ tasksel tasksel/first multiselect ssh-server
 
 # Make sure we have ssh server, curl
 # Python 2.7 and python-apt needed for Ansible.
-d-i pkgsel/include string sudo ntp openssh-server curl python python-apt redis-tools
+d-i pkgsel/include string sudo ntp openssh-server curl python python-apt 
+
 
 
 
